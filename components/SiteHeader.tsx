@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type NavLink = {
   href: string;
@@ -14,6 +14,7 @@ type SiteHeaderProps = {
 
 export default function SiteHeader({ links }: SiteHeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const headerRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (!menuOpen) {
@@ -26,13 +27,21 @@ export default function SiteHeader({ links }: SiteHeaderProps) {
       }
     };
 
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!headerRef.current?.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("pointerdown", handlePointerDown);
 
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("pointerdown", handlePointerDown);
     };
   }, [menuOpen]);
 
@@ -41,7 +50,7 @@ export default function SiteHeader({ links }: SiteHeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-40 border-b border-[var(--line)] bg-[color:rgb(248_246_241_/_0.92)] backdrop-blur-xl">
+    <header ref={headerRef} className="sticky top-0 z-40 border-b border-[var(--line)] bg-[color:rgb(248_246_241_/_0.92)] backdrop-blur-xl">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4 sm:px-8">
         <Link href="/#home" className="flex flex-col leading-none text-black">
           <span className="text-[11px] font-semibold uppercase tracking-[0.34em] text-black/45">
