@@ -212,7 +212,7 @@ export default function Home() {
               </Link>
             </div>
 
-            <div className="mt-10 flex flex-wrap gap-3">
+            {/* <div className="mt-10 flex flex-wrap gap-3">
               {expertise.map((item) => (
                 <span
                   key={item}
@@ -221,7 +221,7 @@ export default function Home() {
                   {item}
                 </span>
               ))}
-            </div>
+            </div> */}
           </div>
 
           <div className="surface overflow-hidden rounded-[2rem] p-3 backdrop-blur-sm">
